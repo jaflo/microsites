@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>microsites</title>
+		<meta name="description" content="A home for small project websites." />
+		<style>
+			html,
+			body {
+				height: 100%;
+				width: 100%;
+				margin: 0;
+				background: #253c78;
+				font-size: 20px;
+				font-family: Arial, sans-serif;
+			}
+
+			body {
+				display: flex;
+				align-items: center;
+			}
+
+			canvas {
+				image-rendering: optimizeSpeed;
+				image-rendering: -moz-crisp-edges;
+				image-rendering: -webkit-optimize-contrast;
+				image-rendering: -o-crisp-edges;
+				image-rendering: pixelated;
+				image-rendering: crisp-edges;
+				-ms-interpolation-mode: nearest-neighbor;
+				display: block;
+				margin: auto;
+				text-align: center;
+				color: #fc466b;
+				font-style: italic;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="c" height="20">ambitiös</canvas>
+		<script>
+			const c = document.getElementById("c");
+			const ctx = c.getContext("2d");
+
+			c.style.height = c.height + "px";
+			c.height = c.height * 2;
+
+			let t = 0;
+			const text = c.innerHTML;
+			const textSize = c.height;
+
+			c.width = writeText();
+			writeText();
+
+			function writeText() {
+				var gradient = ctx.createLinearGradient(0, 0, c.width, 0);
+				gradient.addColorStop("0", "#dd5e98");
+				gradient.addColorStop("1.0", "#256eff");
+				ctx.font = "bold " + textSize + "px Arial, sans-serif";
+				ctx.textBaseline = "middle";
+				ctx.fillStyle = gradient;
+				ctx.fillText(text, 0, c.height / 2);
+				return ctx.measureText(text).width;
+			}
+
+			const pixels = ctx.getImageData(0, 0, c.width, c.height);
+
+			function xy2linear(x, y) {
+				return 4 * (x + y * c.width);
+			}
+
+			function draw() {
+				c.width = c.width;
+
+				let morphed = ctx.getImageData(0, 0, c.width, c.height);
+				for (let x = 0; x < c.width; x++) {
+					const hRatio = x / c.width;
+					const a = Math.pow(hRatio, 2) * c.width;
+					const b = (1 - Math.pow(hRatio - 1, 2)) * c.width;
+					for (let y = 0; y < c.height; y++) {
+						const shifted =
+							(Math.sin(((y + t / 2) / (textSize * 2)) * 2) + 1) /
+							2;
+						const src = xy2linear(
+							parseInt(a * shifted + b * (1 - shifted)),
+							y
+						);
+						const dest = xy2linear(x, y);
+						for (let i = 0; i < 4; i++) {
+							morphed.data[dest + i] = pixels.data[src + i];
+						}
+					}
+				}
+				ctx.putImageData(morphed, 0, 0);
+
+				t++;
+				window.requestAnimationFrame(draw);
+			}
+
+			draw();
+		</script>
+	</body>
+</html>
