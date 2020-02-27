@@ -94,7 +94,7 @@ a {
 #dollas div {
   pointer-events: auto;
   background: #01a992;
-  background-image: url("/dolla.png");
+  background-image: url("./dolla.png");
   background-size: 200px 400px;
   width: 200px;
   height: 400px;
