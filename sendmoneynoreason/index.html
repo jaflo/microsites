@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head manifest="/offline.appcache">
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<meta charset="UTF-8" />
+
+	<title>Send money, no reason!</title>
+	<meta name="title" content="Send money, no reason!">
+	<meta name="description" content="swipe across the screen / toss the bills of money green / hurray! make it rain!">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://projects.loud.red/sendmoneynoreason/">
+	<meta property="og:title" content="Send money, no reason!">
+	<meta property="og:description" content="swipe across the screen / toss the bills of money green / hurray! make it rain!">
+	<meta property="twitter:url" content="https://projects.loud.red/sendmoneynoreason/">
+	<meta property="twitter:title" content="Send money, no reason!">
+	<meta property="twitter:description" content="swipe across the screen / toss the bills of money green / hurray! make it rain!">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+	<meta name="theme-color" content="#175055" />
+	<link rel="stylesheet" href="/styles.css?v=8" />
+
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-104916266-3"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+		gtag('config', 'UA-104916266-3');
+	</script>
+</head>
+<body>
+	<div id="text">
+		<noscript>
+			<div id="nojs">
+				JavaScript is disabled. The site won't work without it :(
+			</div>
+		</noscript>
+		<div id="top">
+			<h1>
+				<span>Send money,</span>
+				<span>no reason!</span>
+			</h1>
+			<div id="count">
+				$<span>0</span>
+			</div>
+		</div>
+		<div id="about">
+			<a href="#about">No, but really, why?</a>
+			<div>
+				Made by <a href="https://florian.janke.me/">Florian</a> to be linked on the
+				<a href="http://www.milliondollarhomepage.com/" rel="nofollow">Million Dollar Homepage</a>
+				(<a href="/mdhlocation.png">where?</a>).
+			</div>
+			<div>Thanks to Ethan for haiku help!</div>
+			<div class="sub">
+				<a href="https://github.com/chrisbateman/impetus/">Impetus.js</a> licensed under the MIT License.
+			</div>
+		</div>
+	</div>
+
+	<div id="help" class="text">
+		Swipe the bills to make it rain!
+	</div>
+
+	<div id="dollas"></div>
+	<div id="simulate"><div></div></div>
+
+	<script src="/impetus.min.js"></script>
+	<script src="/script.js?v=4"></script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+html, body {
+  font-family: -apple-system, BlinkMacSystemFont, "Roboto", "Helvetica", "Helvetica Neue", "Arial", sans-serif;
+  font-size: 16px;
+  padding: 0;
+  margin: 0;
+  color: #01a992;
+  background: #175055;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  overflow: hidden;
+}
+
+a {
+  color: inherit;
+}
+
+#text {
+  position: absolute;
+  padding: 1em;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+#nojs {
+  background: #ef3054;
+  color: white;
+  padding: 1em;
+}
+
+#top {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+#top h1 {
+  margin: 0 0 0.5em 0;
+  font-size: 2em;
+}
+#top h1 span {
+  display: inline-block;
+}
+
+#about div {
+  margin-bottom: 0.5em;
+  display: none;
+}
+#about:target > a {
+  display: none;
+}
+#about:target div {
+  display: block;
+}
+#about .sub {
+  font-size: 0.8em;
+}
+
+#count {
+  font-size: 2em;
+  min-width: 3em;
+  text-align: right;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+
+#help {
+  position: absolute;
+  padding: 1em;
+  bottom: 0;
+  left: 0;
+  -webkit-transform: rotate(-90deg) translateX(-3em);
+      -ms-transform: rotate(-90deg) translateX(-3em);
+          transform: rotate(-90deg) translateX(-3em);
+  -webkit-transform-origin: top left;
+      -ms-transform-origin: top left;
+          transform-origin: top left;
+}
+
+#dollas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  pointer-events: none;
+}
+#dollas div {
+  pointer-events: auto;
+  background: #01a992;
+  background-image: url("/dolla.png");
+  background-size: 200px 400px;
+  width: 200px;
+  height: 400px;
+  color: white;
+  position: absolute;
+  bottom: -160px;
+  left: 50%;
+  margin-left: -100px;
+  outline: 1px solid transparent;
+}
+#dollas div.gone {
+  -webkit-transition: opacity 0.3s ease-in-out;
+  -o-transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.3s ease-in-out;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#simulate {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  z-index: 9999;
+  pointer-events: none;
+}
+#simulate div {
+  width: 4em;
+  height: 4em;
+  background: white;
+  -webkit-box-shadow: -10px -10px 10px rgba(0, 0, 0, 0.2) inset, 0 4px 8px rgba(0, 0, 0, 0.2);
+          box-shadow: -10px -10px 10px rgba(0, 0, 0, 0.2) inset, 0 4px 8px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 9em;
+  -webkit-transition: opacity 0.3s ease-in-out, -webkit-transform 0.3s ease-in-out;
+  transition: opacity 0.3s ease-in-out, -webkit-transform 0.3s ease-in-out;
+  -o-transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out, -webkit-transform 0.3s ease-in-out;
+  opacity: 0;
+  -webkit-transform: scale(0.6);
+      -ms-transform: scale(0.6);
+          transform: scale(0.6);
+}
+#simulate div.shown {
+  opacity: 0.7;
+  -webkit-transform: none;
+      -ms-transform: none;
+          transform: none;
+}
