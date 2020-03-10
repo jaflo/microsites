@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Matrix Editor</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<style>
+	body, input, button {
+		font-family: Arial, sans-serif;
+		margin: 0;
+		font-size: 14px;
+	}
+
+	body, #editor {
+		background: white;
+	}
+
+	body.dragging, body.dragging * {
+		cursor: move;
+	}
+
+	#toolbar {
+		overflow-y: hidden;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+		position: absolute;
+		top: 0;
+		height: 99px;
+		line-height: 20px;
+		left: 0;
+		right: 0;
+		padding: 5px;
+		padding-left: 125px;
+		font-size: 0;
+		white-space: nowrap;
+	}
+
+	#toolbar h1 {
+		display: inline;
+		font-size: 18px;
+		margin: 0;
+		line-height: 25px;
+		position: absolute;
+	    z-index: 2;
+		left: 5px;
+	}
+
+	#toolbar > button {
+		height: 25px;
+		background: white;
+		border: 1px solid;
+		margin-right: 5px;
+		border: 1px solid #ccc;
+		outline: none;
+		border-radius: 3px;
+		display: inline-block;
+	}
+
+	#toolbar button:focus {
+		background: rgba(0,0,0,0.1);
+	}
+
+	#bubble {
+		position: absolute;
+		display: none;
+		max-width: 300px;
+		background: white;
+		border: 1px solid black;
+		box-shadow: 0 3px 5px rgba(0,0,0,0.4);
+		border-radius: 3px;
+		min-width: 40px;
+	}
+
+	#bubble b, #bubble i {
+		position: absolute;
+		bottom: 100%;
+		left: 10px;
+		width: 0;
+		height: 0;
+		border: 8px solid transparent;
+		border-bottom-color: white;
+	}
+
+	#bubble b {
+		margin-bottom: 1px;
+		border-bottom-color: black;
+	}
+
+	#bubble > div {
+		padding: 7px;
+	}
+
+	#bubble > div > div button {
+		margin: 7px 7px 0 0;
+	}
+
+	#bubble > div > div input {
+		width: 40px;
+		margin-top: 7px;
+	}
+
+	#bubble img {
+		display: block;
+		margin-top: 7px;
+        max-width: 100%;
+	}
+
+	#editor {
+		overflow: scroll;
+		-webkit-overflow-scrolling: touch;
+		position: absolute;
+		top: 30px;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		padding: 5px;
+	}
+
+	#editor table {
+		padding: 0;
+		border-spacing: 0;
+		border-collapse: collapse;
+	}
+
+	#editor table td {
+		border: 1px solid #ccc;
+		padding: 5px;
+	}
+
+	#editor table input {
+		padding: 6px;
+		margin: -6px;
+		border: 0;
+		outline: none;
+		background: transparent;
+		width: 100px;
+	}
+
+	#editor table .sides {
+		-webkit-touch-callout: none;
+		-webkit-user-select: none;
+		-khtml-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+	}
+
+	#editor #focus {
+		border: 2px solid black;
+		position: absolute;
+		transition: top 0.1s ease-in-out, left 0.1s ease-in-out,
+			width 0.1s ease-in-out, height 0.1s ease-in-out;
+		background: rgba(0,0,0,0.1);
+		pointer-events: none;
+	}
+
+	#editor #focus.selection {
+		/*border-style: dashed;*/
+		border: 0;
+		padding: 2px;
+		animation: marching-ants 1s linear infinite;
+		background-size: 20px 2px, 20px 2px, 2px 20px, 2px 20px;
+		background-position: 0 0,  0 100%,  0 0,  100% 0;
+		background-repeat: repeat-x,  repeat-x,  repeat-y,  repeat-y;
+		background-image: linear-gradient(to right, black 50%, transparent 50%),
+			linear-gradient(to right, black 50%, transparent 50%),
+			linear-gradient(to bottom, black 50%, transparent 50%),
+			linear-gradient(to bottom, black 50%, transparent 50%);
+	}
+
+	@keyframes marching-ants {
+		/* http://codepen.io/pixelass/pen/cdrwI */
+		0% { background-position: 0 0, 0 100%, 0 0, 100% 0; }
+		100% { background-position: 40px 0, -40px 100%, 0 -40px, 100% 40px; }
+	}
+
+	#editor #focus .handle {
+		margin: 2px;
+		width: 0;
+		height: 0;
+		border: 10px solid transparent;
+		border-color: black transparent transparent black;
+		cursor: move;
+		display: none;
+		pointer-events: auto;
+	}
+
+	#editor #focus.selection .handle {
+		display: block;
+	}
+
+	textarea {
+		display: none;
+	}
+	</style>
+</head>
+<body>
+	<div id="toolbar">
+		<h1 title="It's professional">Matrix editor</h1>
+		<button id="makeimage">Generate image</button>
+		<button id="importfromurl">Edit URL</button>
+		<button id="changesize">Change size</button>
+		<button id="reset">Reset</button>
+	</div>
+	<div id="editor">
+		<table></table>
+		<div id="focus"><div class="handle"></div></div>
+	</div>
+	<textarea></textarea>
+	<div id="bubble"><b></b><i></i><div>content</div></div>
+	<script src="https://loud.red/min.js"></script>
+	<script>
+	$(document).ready(function() {
+		var w = 6, h = 6, hideFocus, start, end, topLeftSelection, topLeftTarget,
+			selecting = false, highlightedRegion = [], dragSelection = false;
+		function makeTable(w, h) {
+			var table = $("#editor table").html(""),
+				alphabet = "ABCDEFGHIJKLMNOPQRSTUWXYZ";
+			table.append('<tr id="heading" class="sides" />')
+			var row = table.find("#heading");
+			for (var i = -1; i < w; i++) {
+				var letter = "";
+				if (i > -1) {
+					letter = new Array(parseInt(i/26)+2).join(alphabet[i%26]);
+				}
+				row.append('<td id="heading'+(i+1)+'">'+letter+'</td>');
+			}
+			for (var i = 0; i < h; i++) {
+				table.append('<tr id="row'+i+'" />');
+				row = $("#editor table #row"+i);
+				row.append('<td id="side'+(i+1)+'" class="sides">'+(i+1)+'</td>');
+				for (var j = 0; j < w; j++) {
+					row.append('<td id="cell'+j+'"><input id="r'+i+'c'+j+'" type="text" /></td>');
+				}
+			}
+			table.find("input").keydown(function(e) {
+				var me = $(this),
+					code = e.keyCode || e.which,
+					row = parseInt(me.parents("tr").attr("id").substr(3)),
+					col = parseInt(me.parents("td").attr("id").substr(4));
+				if ((me.getCursorPosition() == 0 && code == 37) || code == 38 ||
+					(me.getCursorPosition() == me.val().length && code == 39) || code == 40 ||
+					me.val().length == 0 || e.ctrlKey || e.metaKey) {
+					if (code == 37) { // left
+						col--;
+					} else if (code == 38) { // up
+						row--;
+					} else if (code == 39) { // right
+						col++;
+					} else if (code == 40) { // down
+						row++;
+					}
+					if (code > 36 && code < 41) {
+						table.find("#r"+row+"c"+col).focus();
+						e.preventDefault();
+					}
+				}
+			}).on("focus click", function() {
+				table.find("td").removeClass("focus");
+				var me = $(this).parents("td").addClass("focus"),
+					targetPos = me.offset();
+				clearTimeout(hideFocus);
+				highlightedRegion = [];
+				$("#editor #focus").removeClass("selection").show()
+					.offset({top: targetPos.top-1, left: targetPos.left-1})
+					.width(me.outerWidth()-1).height(me.outerHeight()-1);
+			}).blur(function() {
+				if (highlightedRegion.length > 0 && !selecting) {
+					var selected = $(this).attr("id").substring(1).split("c");
+					if (selected[0] < highlightedRegion[0] ||
+						selected[0] > highlightedRegion[1] ||
+						selected[1] < highlightedRegion[2] ||
+						selected[1] > highlightedRegion[3]) {
+						//highlightedRegion = [];
+					}
+				} else if (!selecting) {
+					table.find("td").removeClass("focus");
+					hideFocus = setTimeout(function() {
+						$("#editor #focus").hide().removeClass("selection");
+					}, 100);
+				}
+			}).keydown(function(e) {
+				if ((e.ctrlKey || e.metaKey) && (e.keyCode || e.which) == 83) {
+					$("#makeimage").click();
+					e.preventDefault();
+					return false;
+				}
+			}).mousedown(function() {
+				start = $(this).attr("id").substring(1).split("c");
+				selecting = true;
+			}).on("mouseup mouseenter", function() {
+				if (selecting || dragSelection) {
+					topLeftTarget = $(this).attr("id").substring(1).split("c");
+				}
+				if (selecting) {
+					end = $(this).attr("id").substring(1).split("c");
+					if (start[0] - end[0] != 0 || start[1] - end[1] != 0) {
+						var startPos = $("#row"+start[0]+" #cell"+start[1]).offset(),
+							endPos = $("#row"+end[0]+" #cell"+end[1]).offset(),
+							top = Math.min(startPos.top, endPos.top),
+							left = Math.min(startPos.left, endPos.left),
+							width = Math.abs(startPos.left-endPos.left)+$("#row"+start[1]+" #cell"+end[1]).outerWidth(),
+							height = Math.abs(startPos.top-endPos.top)+$("#row"+start[1]+" #cell"+end[1]).outerHeight();
+						clearTimeout(hideFocus);
+						highlightedRegion = [];
+						$("#editor #focus").show().removeClass("selection")
+							.offset({top: top-1, left: left-1})
+							.width(width-1).height(height-1);
+					}
+				} else if (dragSelection) {
+					var nowPos = $("#row"+Math.min(topLeftTarget[0], h-(highlightedRegion[1]-highlightedRegion[0])-1)+
+						" #cell"+Math.min(topLeftTarget[1], w-(highlightedRegion[3]-highlightedRegion[2])-1)).offset();
+					$("#editor #focus").offset({top: nowPos.top-1, left: nowPos.left-1});
+				}
+			}).mouseup(function() {
+				if (selecting && (start[0] - end[0] != 0 || start[1] - end[1] != 0)) {
+					var rowStart = Math.min(start[0], end[0]),
+						rowEnd = Math.max(start[0], end[0]),
+						colStart = Math.min(start[1], end[1]),
+						colEnd = Math.max(start[1], end[1]);
+					highlightedRegion = [rowStart, rowEnd, colStart, colEnd];
+					$("#editor #focus").addClass("selection");
+					$("#editor input").blur();
+					var topLeftSelection = $(this).attr("id").substring(1).split("c");
+				}
+				selecting = false;
+			}).on("paste", function(e) {
+				var clipboard = e.clipboardData || e.originalEvent.clipboardData;
+				if (clipboard) {
+					var text = clipboard.getData("text/plain");
+					if (text.length > 0 && (text.indexOf("\t")+text.indexOf("\n")) > -1) {
+						var rows = text.split("\n"),
+							topLeftTarget = $(this).attr("id").substring(1).split("c"),
+							offsetStartRow = parseInt(topLeftTarget[0]),
+							offsetStartCol = parseInt(topLeftTarget[1]);
+						for (var i = 0; i < rows.length; i++) {
+							var cols = rows[i].split("\t");
+							for (var j = 0; j < cols.length; j++) {
+								$("#r"+(offsetStartRow+i)+"c"+(offsetStartCol+j))
+									.val(cols[j]);
+							}
+						}
+						e.preventDefault();
+					}
+				}
+			}).first().focus();
+		}
+		$("#editor #focus .handle").mousedown(function() {
+			dragSelection = true;
+			$("body").addClass("dragging");
+		});
+		$(document).mouseup(function() {
+			if (dragSelection) {
+				var rows = highlightedRegion[1]-highlightedRegion[0]+1,
+					cols = highlightedRegion[3]-highlightedRegion[2]+1,
+					selectionContent = new Array(rows),
+					offsetStartRow = parseInt(topLeftTarget[0]),
+					offsetStartCol = parseInt(topLeftTarget[1]);
+				for (var i = 0; i < rows; i++) {
+					selectionContent[i] = new Array(cols);
+					for (var j = 0; j < cols; j++) {
+						selectionContent[i][j] = $("#r"+(highlightedRegion[0]+i)+
+							"c"+(highlightedRegion[2]+j)).val();
+						$("#r"+(highlightedRegion[0]+i)+
+							"c"+(highlightedRegion[2]+j)).val("");
+					}
+				}
+				for (var i = 0; i < rows; i++) {
+					for (var j = 0; j < cols; j++) {
+						if (selectionContent[i][j] != "") {
+							$("#r"+(offsetStartRow+i)+"c"+(offsetStartCol+j))
+								.val(selectionContent[i][j]);
+						}
+					}
+				}
+				$("#r"+offsetStartRow+"c"+offsetStartCol).focus();
+			} else if (selecting && (start[0] - end[0] != 0 || start[1] - end[1] != 0)) {
+				var offsetStartRow = parseInt(topLeftTarget[0]),
+					offsetStartCol = parseInt(topLeftTarget[1]);
+				$("#r"+offsetStartRow+"c"+offsetStartCol).mouseup();
+			}
+			dragSelection = false;
+			selecting = false;
+			$("body").removeClass("dragging");
+		}).mousemove(function(e) {
+			if ((selecting || dragSelection) && (start[0] != topLeftTarget[0] && start[1] != topLeftTarget[1])) {
+				e.preventDefault();
+			}
+		}).keydown(function(e) {
+			if (highlightedRegion.length > 0 && !selecting) {
+				if (e.keyCode == 46 || e.keyCode == 8) { // [delete] or [backspace]
+					var rows = highlightedRegion[1]-highlightedRegion[0]+1,
+						cols = highlightedRegion[3]-highlightedRegion[2]+1;
+					for (var i = 0; i < rows; i++) {
+						for (var j = 0; j < cols; j++) {
+							$("#r"+(highlightedRegion[0]+i)+
+								"c"+(highlightedRegion[2]+j)).val("");
+						}
+					}
+					e.preventDefault();
+				} else if ((e.ctrlKey || e.metaKey) && e.keyCode == 67) {
+					var rows = highlightedRegion[1]-highlightedRegion[0]+1,
+						cols = highlightedRegion[3]-highlightedRegion[2]+1,
+						selectionContent = new Array(rows),
+						offsetStartRow = parseInt(topLeftTarget[0]),
+						offsetStartCol = parseInt(topLeftTarget[1]);
+					for (var i = 0; i < rows; i++) {
+						selectionContent[i] = new Array(cols);
+						for (var j = 0; j < cols; j++) {
+							selectionContent[i][j] = $("#r"+(highlightedRegion[0]+i)+
+								"c"+(highlightedRegion[2]+j)).val();
+						}
+						selectionContent[i] = selectionContent[i].join("\t");
+					}
+					$("textarea").val(selectionContent.join("\n"))[0].select();
+					document.execCommand("cut");
+				}
+			}
+		});
+		$("#reset").click(function() {
+			bubble($(this), 'Are you sure you want to reset? <div><button id="cancel">Cancel</button><button id="confirm">Reset</button></div>', function() {
+				$("#bubble #confirm").click(function() {
+					makeTable(w, h);
+				});
+			});
+		});
+		$("#changesize").click(function() {
+			bubble($(this), 'How big should the table be? MatriX!3000 automatically sizes matrices to exclude empty fields. <div><input type="number" id="height" />&times;<input type="number" id="width" /></div> <div><button id="cancel">Cancel</button><button id="confirm">Set</button></div>', function() {
+				$("#bubble #confirm").click(function() {
+					w = parseInt($("#width").val());
+					h = parseInt($("#height").val());
+					makeTable(w, h);
+				});
+			});
+		});
+		$("#makeimage").click(function() {
+			var actualW = 0, actualH = 0,
+				latex = "\\begin{bmatrix}";
+			for (var i = 0; i < w; i++) {
+				for (var j = 0; j < h; j++) {
+					if ($("#r"+i+"c"+j).val() && $("#r"+i+"c"+j).val().length > 0) {
+						actualW = Math.max(actualW, i+1);
+						actualH = Math.max(actualH, j+1);
+					}
+				}
+			}
+			var all = new Array(actualW);
+			for (var i = 0; i < actualW; i++) {
+				all[i] = new Array(actualH);
+				for (var j = 0; j < actualH; j++) {
+					all[i][j] = $("#r"+i+"c"+j).val();
+				}
+				latex += all[i].join(" & ")+"\\\\";
+			}
+			latex += "\\end{bmatrix}";
+			var link = "https://latex.codecogs.com/gif.latex?%5Cdpi%7B150%7D%20"+encodeURIComponent(latex);
+			bubble($(this), '<input value="'+link+'" /><img /><span>Loading</span><div><button id="cancel">Done</button></div>', function() {
+				$("#bubble img").load(function() {
+					$(this).show().next("span").hide();;
+				}).hide().attr("src", link);
+			});
+		});
+		$("#importfromurl").click(function() {
+			bubble($(this), '<input /><div><button id="cancel">Cancel</button><button id="confirm">Import</button></div>', function() {
+				$("#bubble #confirm").click(function() {
+					var url = decodeURIComponent($("#bubble input").val()),
+						rows = url.substring(url.indexOf("\\begin{bmatrix}")+15, url.indexOf("\\end{bmatrix}")).split("\\\\");
+					w = Math.max(w, rows[0].length);
+					h = Math.max(h, rows.length);
+					makeTable(w, h);
+					for (var i = 0; i < rows.length; i++) {
+						var row = rows[i].split(" & ");
+						for (var j = 0; j < row.length; j++) {
+							$("#r"+i+"c"+j).val(row[j]);
+						}
+					}
+				});
+			});
+		});
+		function bubble(target, content, after) {
+			var bubble = $("#bubble").attr("style", ""),
+				targetPos = target.offset();
+			bubble.find("div").html(content);
+			bubble.attr("style", "").offset({top: targetPos.top+30, left: targetPos.left}).show();
+			if (typeof after == "function") after();
+			bubble.find("input").keydown(function(e) {
+				if ((e.keyCode || e.which) == 13) {
+					bubble.find("#confirm").click();
+				}
+			}).first().focus().select();
+			bubble.find("button").click(function() {
+				bubble.hide();
+			});
+		}
+		makeTable(w, h);
+	});
+	// http://stackoverflow.com/a/1909997/4938153
+	!function(e,t){e.fn.getCursorPosition=function(){var t=e(this).get(0),n=0;if("selectionStart"in t)n=t.selectionStart;else if("selection"in document){t.focus();var c=document.selection.createRange(),o=document.selection.createRange().text.length;c.moveStart("character",-t.value.length),n=c.text.length-o}return n}}(jQuery);
+	</script>
+	<script type="text/javascript">
+	var _paq = _paq || [];
+	_paq.push(["trackPageView"]);
+	_paq.push(["enableLinkTracking"]);
+	(function() {
+		var u="//track.loud.red/";
+		_paq.push(["setTrackerUrl", u+"piwik.php"]);
+		_paq.push(["setSiteId", 2]);
+		var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0];
+		g.type="text/javascript"; g.async=true; g.defer=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
+	})();
+	</script>
+	<noscript><p><img src="//track.loud.red/piwik.php?idsite=2" style="border:0;" alt=""/></p></noscript>
+</body>
+</html>

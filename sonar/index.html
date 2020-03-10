@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Sonar</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#000000" />
+<style>
+html, body {
+	padding: 0;
+	margin: 0;
+	background: black;
+	color: white;
+	color: rgba(255,255,255,0.8);
+	font-size: 16px;
+	font-family: sans-serif;
+	text-align: center;
+	line-height: 1.4;
+}
+
+button {
+	font-family: inherit;
+	font-size: 1em;
+	background: none;
+	border: 2px solid;
+	color: inherit;
+	padding: 0.6em 1.2em;
+	border-radius: 0.2em;
+	cursor: pointer;
+}
+
+button.disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+#wrap {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 100%;
+	max-width: 400px;
+	padding: 0.4em;
+}
+
+#wrap > div {
+	display: none;
+}
+
+#wrap > #intro {
+	display: block;
+}
+
+#rounds {
+	margin-bottom: 1em;
+}
+
+#rounds i {
+	display: inline-block;
+	border: 2px solid;
+	width: 1em;
+	height: 1em;
+	border-radius: 1em;
+	opacity: 0.5;
+	margin: 0 0.2em;
+}
+
+#rounds i.completed {
+	background: white;
+}
+
+#rounds i.active {
+	background: white;
+	opacity: 1;
+}
+
+#rounds i.pulse {
+	animation: pulse 0.5s ease-out 1;
+}
+
+@keyframes pulse {
+	50% { box-shadow: 0 0 0 16px rgba(255,255,255,0.5) }
+	to { box-shadow: 0 0 0 26px transparent }
+}
+
+#results canvas {
+	display: block;
+	width: 200px;
+	max-width: 100%;
+	margin: auto;
+}
+
+#results > div {
+	position: relative;
+	margin-bottom: 2em;
+}
+
+#results h2 {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	margin: 0;
+}
+
+#animation {
+	position: relative;
+	height: 100px;
+	transition: 1s all ease-out 0.6s;
+}
+
+#animation.hidden {
+	opacity: 0;
+}
+
+#animation > div {
+	position: absolute;
+}
+
+#animation .sound,
+#animation .sound div {
+	border: 2px solid transparent;
+	border-bottom-color: inherit;
+	border-radius: 99px;
+	padding: 3px;
+}
+
+#animation .sound {
+	position: absolute;
+	top: -14px;
+	left: 50%;
+	animation: move 2s ease-in-out infinite alternate;
+}
+
+@keyframes move {
+	from {
+		opacity: 1;
+		transform: translateX(-50%) translateX(-30px) rotateZ(-20deg);
+	}
+	45% {
+		opacity: 0;
+		transform: translateX(-50%) translateX(-30px) rotateZ(-20deg);
+	}
+	55% {
+		opacity: 0;
+		transform: translateX(-50%) translateX(30px) rotateZ(20deg);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(-50%) translateX(30px) rotateZ(20deg);
+	}
+}
+
+#animation .phone {
+    position: absolute;
+    width: 34px;
+    height: 46px;
+    border: 2px solid;
+    border-radius: 5px;
+    bottom: 10px;
+    left: 50%;
+    transform-origin: bottom center;
+    margin-left: -18px;
+	animation: sweep 2s ease-in-out infinite alternate 0.6s;
+}
+
+@keyframes sweep {
+	from { transform: rotateZ(-16deg) }
+	40% { transform: rotateZ(-16deg) }
+	60% { transform: rotateZ(16deg) }
+	to { transform: rotateZ(16deg) }
+}
+
+#animation .phone .tap {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 9px;
+	background: white;
+    top: 50%;
+    left: 50%;
+    margin: -5px;
+	animation: tap 2s ease-in-out infinite;
+}
+
+@keyframes tap {
+	from {
+		transform: scale(0);
+		opacity: 0;
+	}
+	10% {
+		transform: scale(1);
+		opacity: 1;
+	}
+	20% {
+		transform: scale(1);
+		opacity: 1;
+	}
+	30% {
+		transform: scale(2);
+		opacity: 0;
+	}
+	to {
+		transform: scale(2);
+		opacity: 0;
+	}
+}
+</style>
+</head>
+<body>
+<div id="wrap">
+	<h1>Sonar</h1>
+	<div id="intro">
+		<p>Wear your headphones and physically point your device at the location of the sound.</p>
+		<div id="animation" class="hidden">
+			<div class="sound">
+				<div>
+					<div></div>
+				</div>
+			</div>
+			<div class="phone">
+				<div class="tap"></div>
+			</div>
+		</div>
+		<p class="status">Loading...</p>
+		<button class="disabled">Start</button>
+	</div>
+	<div id="main">
+		<div id="rounds">
+			<i></i><i></i><i></i><i></i><i></i>
+		</div>
+		<p class="status"></p>
+		<button>Shoot</button>
+	</div>
+	<div id="results">
+		<div>
+			<h2></h2>
+			<canvas id="visual" width="400" height="400"></canvas>
+		</div>
+		<button>Restart</button>
+		<p>Lower scores are better</p>
+	</div>
+</div>
+<script src="https://sonar.loud.red/min.js"></script>
+<script src="https://sonar.loud.red/app.js?v=3"></script>
+<!-- Piwik -->
+<script type="text/javascript">
+var _paq = _paq || [];
+// tracker methods like "setCustomDimension" should be called before "trackPageView"
+_paq.push(["trackPageView"]);
+_paq.push(["enableLinkTracking"]);
+(function() {
+	var u="//track.loud.red/";
+	_paq.push(["setTrackerUrl", u+"piwik.php"]);
+	_paq.push(["setSiteId", "5"]);
+	var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0];
+	g.type="text/javascript"; g.async=true; g.defer=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
+})();
+</script>
+<!-- End Piwik Code -->
+</body>
+</html>
