@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+
+		<title>Together: Watch videos with friends</title>
+
+		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+		<link rel="manifest" href="/site.webmanifest" />
+		<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#f95738" />
+		<meta name="msapplication-TileColor" content="#f95738" />
+		<meta name="theme-color" content="#ffffff" />
+
+		<link rel="stylesheet" href="/global.css" />
+		<link rel="stylesheet" href="/build/bundle.css" />
+		<script defer src="/build/bundle.js"></script>
+
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+	</head>
+
+	<body>
+		<header>
+			<h1>Together</h1>
+		</header>
+		<main>
+			<p>
+				Use this website to watch videos from slightly sketchy sites in real time. You cannot use this for
+				Netflix or YouTube, use <a href="https://www.netflixparty.com">Netflix Party</a> or
+				<a href="https://togethertube.com">TogetherTube</a> for those instead.
+			</p>
+			<div id="join">
+				<noscript><p>This app requires JavaScript.</p></noscript>
+				<div class="app"></div>
+			</div>
+			<div id="host">
+				<h2>Host Your Own</h2>
+				<p>
+					Watch videos together with your friends in realtime! Install the chrome extension and click the icon
+					in the menubar. Note that creating a sharable link is faster in Chrome, but the website works in
+					both browsers.
+				</p>
+				<a href="https://chrome.google.com/webstore/detail/lmdncbnffdiincblimjaopmnbeoflhmc" class="btn"
+					>Chrome</a
+				>
+				<a href="https://addons.mozilla.org/firefox/addon/together-videos/" class="btn">Firefox</a>
+			</div>
+		</main>
+		<footer>
+			&copy; 2020
+			<a href="https://florian.janke.me">Florian</a>
+		</footer>
+		<script src="https://cdn.jsdelivr.net/npm/webtorrent@latest/webtorrent.min.js"></script>
+	</body>
+</html>

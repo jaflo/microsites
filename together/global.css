@@ -1,0 +1,107 @@
+html,
+body {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	margin: 0;
+	line-height: 1.3;
+}
+
+body {
+	padding: 1em;
+	box-sizing: border-box;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif,
+		"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+	background: #faf0ca;
+	color: #0d3b66;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+	border-bottom: 1px solid;
+}
+
+a:hover {
+	border-bottom-style: dashed;
+}
+
+h1,
+h2 {
+	font-size: 1.5em;
+	margin: 0 0 16px 0;
+}
+
+h2 {
+	font-size: 1.2em;
+	margin: 0 0 16px 0;
+}
+
+p {
+	margin: 1em 0;
+}
+
+header h1,
+main,
+footer {
+	max-width: 500px;
+	margin: auto;
+}
+
+input,
+textarea,
+button,
+.btn {
+	display: inline-block;
+	font-family: inherit;
+	font-size: inherit;
+	padding: 0.5em 1em;
+	margin: 0 0 0.5em 0;
+	box-sizing: border-box;
+	border: none;
+	border-radius: 0;
+	color: inherit;
+	background: white;
+	outline: none;
+}
+
+button,
+.btn {
+	cursor: pointer;
+}
+
+.btn:hover {
+	border: 0;
+}
+
+input:hover,
+textarea:hover,
+button:hover,
+.btn:hover,
+input:focus,
+textarea:focus,
+button:focus,
+.btn:focus {
+	font-style: italic;
+}
+
+main > div {
+	margin: 1em 0;
+}
+
+.primary {
+	background: #f95738;
+	color: #faf0ca;
+}
+
+header {
+	background: #f95738;
+	color: #faf0ca;
+	padding: 1em;
+	margin: -1em -1em 0 -1em;
+}
+
+footer {
+	opacity: 0.5;
+}
