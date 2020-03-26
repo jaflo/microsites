@@ -1,5 +1,23 @@
 .cover.svelte-1mqhnzt{position:absolute;top:0;left:0;right:0;bottom:0;background:black;z-index:10}
 .spinner.svelte-5hc1l6{animation:svelte-5hc1l6-spin 0.5s infinite linear;border:3px solid #faf0ca;border-top-color:transparent;width:2em;height:2em;position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);border-radius:9em}@keyframes svelte-5hc1l6-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-.wrapper.svelte-w11gym.svelte-w11gym{color:#faf0ca}.hidecursor.svelte-w11gym.svelte-w11gym{cursor:none}.dummy.svelte-w11gym.svelte-w11gym{opacity:0}video.svelte-w11gym.svelte-w11gym{width:100%;height:100%;position:absolute;top:0;left:0;pointer-events:none}.controls.svelte-w11gym.svelte-w11gym,.overlay.svelte-w11gym.svelte-w11gym,.overlay.svelte-w11gym .progress.svelte-w11gym{position:absolute;bottom:0;left:0;right:0}.controls.svelte-w11gym.svelte-w11gym{display:flex;align-items:center;margin-bottom:4px;opacity:0;transition:opacity 0.3s ease-in-out}.controls.svelte-w11gym.svelte-w11gym:before{position:absolute;left:0;right:0;bottom:-10px;height:100px;background:linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);content:"";display:block}.controls.visible.svelte-w11gym.svelte-w11gym{opacity:1}button.svelte-w11gym.svelte-w11gym{background:none;border:0;margin:0;padding:0.5em;line-height:1;z-index:2}button.main.svelte-w11gym.svelte-w11gym{padding:0.5em 2em}.controls.svelte-w11gym div.svelte-w11gym{margin-left:1em;font-variant-numeric:tabular-nums lining-nums;cursor:default;z-index:2}.spacer.svelte-w11gym.svelte-w11gym{flex:1}.overlay.svelte-w11gym.svelte-w11gym{top:0;opacity:0;background:black}.overlay.svelte-w11gym .progress div.svelte-w11gym{border-bottom:4px solid}.overlay.svelte-w11gym .pause.svelte-w11gym{position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);font-size:2em;cursor:default}.paused.svelte-w11gym .overlay.svelte-w11gym{opacity:0.6}.syncwarning.svelte-w11gym.svelte-w11gym{position:absolute;top:0;left:0;right:0;padding:1em;background:#faf0ca;color:#0d3b66;box-shadow:0 0 10em black, 0 0 3em black}
+.wrapper.svelte-2x2nic.svelte-2x2nic{color:white}.hidecursor.svelte-2x2nic.svelte-2x2nic{cursor:none}.dummy.svelte-2x2nic.svelte-2x2nic{opacity:0}video.svelte-2x2nic.svelte-2x2nic{width:100%;height:100%;position:absolute;top:0;left:0;pointer-events:none}.controls.svelte-2x2nic.svelte-2x2nic,.overlay.svelte-2x2nic.svelte-2x2nic,.overlay.svelte-2x2nic .progress.svelte-2x2nic{position:absolute;bottom:0;left:0;right:0}.controls.svelte-2x2nic.svelte-2x2nic{display:flex;align-items:center;padding-bottom:4px;opacity:0;transition:opacity 0.3s ease-in-out}.controls.svelte-2x2nic.svelte-2x2nic:before{position:absolute;left:0;right:0;bottom:0;height:80px;background:linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);background:linear-gradient(
+			to bottom,
+			hsla(0, 0%, 0%, 0) 0%,
+			hsla(0, 0%, 0%, 0.009) 8.1%,
+			hsla(0, 0%, 0%, 0.034) 15.5%,
+			hsla(0, 0%, 0%, 0.073) 22.5%,
+			hsla(0, 0%, 0%, 0.123) 29%,
+			hsla(0, 0%, 0%, 0.181) 35.3%,
+			hsla(0, 0%, 0%, 0.246) 41.2%,
+			hsla(0, 0%, 0%, 0.315) 47.1%,
+			hsla(0, 0%, 0%, 0.385) 52.9%,
+			hsla(0, 0%, 0%, 0.454) 58.8%,
+			hsla(0, 0%, 0%, 0.519) 64.7%,
+			hsla(0, 0%, 0%, 0.577) 71%,
+			hsla(0, 0%, 0%, 0.627) 77.5%,
+			hsla(0, 0%, 0%, 0.666) 84.5%,
+			hsla(0, 0%, 0%, 0.691) 91.9%,
+			hsla(0, 0%, 0%, 0.7) 100%
+		);content:"";display:block}.controls.visible.svelte-2x2nic.svelte-2x2nic{opacity:1}button.svelte-2x2nic.svelte-2x2nic{background:none;border:0;margin:0;padding:0.5em;line-height:1;z-index:2}button.main.svelte-2x2nic.svelte-2x2nic{padding:0.5em 2em}.controls.svelte-2x2nic div.svelte-2x2nic{margin-left:1em;font-variant-numeric:tabular-nums lining-nums;cursor:default;z-index:2}.spacer.svelte-2x2nic.svelte-2x2nic{flex:1}.overlay.svelte-2x2nic.svelte-2x2nic{top:0;opacity:0;background:black}.overlay.svelte-2x2nic .progress div.svelte-2x2nic{border-bottom:4px solid}.overlay.svelte-2x2nic .pause.svelte-2x2nic{position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);font-size:2em;cursor:default}.paused.svelte-2x2nic .overlay.svelte-2x2nic{opacity:0.6}.syncwarning.svelte-2x2nic.svelte-2x2nic{position:absolute;top:0;left:0;right:0;padding:1em;background:#faf0ca;color:#0d3b66;box-shadow:0 0 10em black, 0 0 3em black}
 
 /*# sourceMappingURL=bundle.css.map */
