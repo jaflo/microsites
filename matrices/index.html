@@ -208,7 +208,7 @@
 	</div>
 	<textarea></textarea>
 	<div id="bubble"><b></b><i></i><div>content</div></div>
-	<script src="https://loud.red/min.js"></script>
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 	<script>
 	$(document).ready(function() {
 		var w = 6, h = 6, hideFocus, start, end, topLeftSelection, topLeftTarget,
@@ -497,18 +497,7 @@
 	// http://stackoverflow.com/a/1909997/4938153
 	!function(e,t){e.fn.getCursorPosition=function(){var t=e(this).get(0),n=0;if("selectionStart"in t)n=t.selectionStart;else if("selection"in document){t.focus();var c=document.selection.createRange(),o=document.selection.createRange().text.length;c.moveStart("character",-t.value.length),n=c.text.length-o}return n}}(jQuery);
 	</script>
-	<script type="text/javascript">
-	var _paq = _paq || [];
-	_paq.push(["trackPageView"]);
-	_paq.push(["enableLinkTracking"]);
-	(function() {
-		var u="//track.loud.red/";
-		_paq.push(["setTrackerUrl", u+"piwik.php"]);
-		_paq.push(["setSiteId", 2]);
-		var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0];
-		g.type="text/javascript"; g.async=true; g.defer=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
-	})();
-	</script>
-	<noscript><p><img src="//track.loud.red/piwik.php?idsite=2" style="border:0;" alt=""/></p></noscript>
+	<script async defer src="https://sa.loud.red/latest.js"></script>
+	<noscript><img src="https://sa.loud.red/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" /></noscript>
 </body>
 </html>
